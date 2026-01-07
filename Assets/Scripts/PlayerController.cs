@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     // Variable to keep track of collected "PickUp" objects.
     private int count;
+    
 
     // Movement along X and Y axes.
     private float movementX;
@@ -17,27 +18,68 @@ public class PlayerController : MonoBehaviour
     // Speed at which the player moves.
     public float speed = 0;
 
+    public float levelTime;
+    private float timeLeft;
+    private bool gameRunning = true;
+
+
+
+
     // UI text component to display count of "PickUp" objects collected.
     public TextMeshProUGUI countText;
+    public TextMeshProUGUI timeText;
+
 
     // UI object to display winning text.
-    public GameObject winTextObject;
+    //  public GameObject winTextObject;
+
+    public GameManager gameManager;
+
 
     // Start is called before the first frame update.
     void Start()
     {
+        gameManager.StartGame();
         // Get and store the Rigidbody component attached to the player.
         rb = GetComponent<Rigidbody>();
 
         // Initialize count to zero.
         count = 0;
+        
 
         // Update the count display.
         SetCountText();
 
+        timeLeft = levelTime;
+
+        UpdateTimeText();
+
+
+
+
         // Initially set the win text to be inactive.
-        winTextObject.SetActive(false);
+        //winTextObject.SetActive(false);
     }
+
+
+    void Update()
+    {
+        if (!gameRunning) return;
+
+        timeLeft -= Time.deltaTime;
+
+        if (timeLeft <= 0f)
+        {
+            timeLeft = 0f;
+            gameRunning = false;
+            gameManager.FailLevel();
+        }
+
+        UpdateTimeText();
+    }
+
+
+
 
     // This function is called when a move input is detected.
     void OnMove(InputValue movementValue)
@@ -87,7 +129,9 @@ public class PlayerController : MonoBehaviour
         if (count >= 9)
         {
             // Display the win text.
-            winTextObject.SetActive(true);
+            //winTextObject.SetActive(true);
+
+            gameManager.CompleteLevel();
 
             // Destroy the enemy GameObject.
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
@@ -98,14 +142,20 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            // Destroy the current object
-            Destroy(gameObject);
+            //Destroy the current object
 
-            // Update the winText to display "You Lose!"
-            winTextObject.gameObject.SetActive(true);
-            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
+            gameManager.FailLevel();
+               
 
         }
+
+    }
+
+    void UpdateTimeText()
+    {
+        timeText.text = "Time Left: " + Mathf.CeilToInt(timeLeft).ToString();
 
     }
 
