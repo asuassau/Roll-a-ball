@@ -1,89 +1,117 @@
-# Project Title
+# Juego Roll-a-Ball
 
-One Paragraph of project description goes here
+Este proyecto consiste en un pequeño videojuego desarrollado con **Unity**, basado en el clásico *Roll-a-Ball*.  
+El objetivo del juego es controlar una esfera y recoger una serie de **collectibles (pickups)** dentro de un tiempo limitado, a lo largo de varios niveles.
+
+Durante el juego, el jugador deberá:
+- Mover la esfera por el escenario.
+- Recoger todos los pickups del nivel.
+- Evitar a un enemigo que provoca la derrota al entrar en contacto.
+- Superar el límite de tiempo establecido.
+
+El juego consta de **tres niveles**.  
+Una vez completados todos con éxito, el juego finaliza mostrando la pantalla de victoria.
+
+---
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+A continuación se describen los requisitos mínimos recomendados para poder **desarrollar y ejecutar correctamente** el proyecto utilizando Unity.
 
-### Prerequisites
+### Requisitos de Hardware
 
-What things you need to install the software and how to install them
+- **Procesador:** CPU x64 con soporte SSE2  
+- **Memoria RAM:** mínimo 8 GB (16 GB recomendado)  
+- **Tarjeta gráfica:** Compatible con DirectX 10 / 11 / 12  
+- **Almacenamiento:** Al menos 30 GB de espacio libre (SSD recomendado)  
+- **Pantalla:** Resolución mínima 1366×768  
 
-```
-Give examples
-```
+---
 
-### Installing
+## Prerequisites
 
-A step by step series of examples that tell you how to get a development env running
+El software necesario para trabajar con este proyecto es el siguiente:
 
-Say what the step will be
+- **Unity Hub**
+- **Unity Editor** (versión utilizada: **Unity 6.3 LTS**)
+- **Visual Studio Community 2022**, con la carga de trabajo:
+  - *Desarrollo de juegos con Unity*
 
-```
-Give the example
-```
+---
 
-And repeat
+## Installing
 
-```
-until finished
-```
+Para acceder y trabajar con el proyecto, sigue los pasos indicados a continuación:
 
-End with an example of getting some data out of the system or using it for a little demo
+1. Descarga el repositorio desde GitHub:  
+   https://github.com/asuassau/Roll-a-ball.git
 
-## Running the tests
+2. Extrae el archivo ZIP descargado.
 
-Explain how to run the automated tests for this system
+3. Abre **Unity Hub**.
 
-### Break down into end to end tests
+4. Accede a la pestaña **Projects** y pulsa:
+  Add → Add project from disk
 
-Explain what these tests test and why
+5. Selecciona la carpeta del proyecto previamente descomprimida.
 
-```
-Give an example
-```
+Una vez realizado este proceso, el proyecto se abrirá en el editor de Unity y estará listo para su ejecución o modificación.
 
-### And coding style tests
+---
 
-Explain what these tests test and why
+## Running the Game
 
-```
-Give an example
-```
+Para ejecutar el juego desde el editor de Unity:
 
-## Deployment
+1. Abre la escena inicial del proyecto (menú principal o primer nivel).
+2. Pulsa el botón **Play** en la parte superior del editor.
+3. Controla la esfera utilizando:
+- Teclas de movimiento configuradas (WASD / flechas).
+- Barra espaciadora para saltar.
+4. Recoge todos los pickups antes de que se agote el tiempo y evita al enemigo.
 
-Add additional notes about how to deploy this on a live system
+---
+
+## Gameplay Features
+
+- Movimiento físico mediante Rigidbody.
+- Sistema de salto controlado.
+- Contador de tiempo por nivel.
+- Sistema de niveles.
+- Pantallas de victoria y derrota.
+- Enemigo con comportamiento de persecución.
+- Interfaz gráfica mediante UI (TextMeshPro).
+
+---
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+- **Unity 6.3 LTS** – Motor de desarrollo del videojuego  
+- **C#** – Lenguaje de programación  
+- **Visual Studio Community 2022** – Entorno de desarrollo  
+- **TextMeshPro** – Sistema de texto para la interfaz gráfica  
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+---
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+- **Versión:** 1.0  
+
+---
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+- **Alejandro Jesús Suárez Saavedra**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Este proyecto ha sido desarrollado con fines **educativos y de aprendizaje**, por lo que no cuenta con una licencia específica.  
+Su uso es libre para fines académicos o formativos.
+
+---
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
-etc
+Este proyecto ha sido desarrollado gracias a los conocimientos adquiridos y las herramientas proporcionadas en la asignatura **Programación de Gráficos y Lenguajes (PGL)**, perteneciente al módulo de **Desarrollo de Aplicaciones Multiplataforma (DAM)**, cursado en el **IES El Rincón**.
