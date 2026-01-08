@@ -7,6 +7,9 @@ public class PlayerController : MonoBehaviour
     // Rigidbody of the player.
     private Rigidbody rb;
 
+    public float jumpForce = 5f;
+    private bool isGrounded = true;
+
     // Variable to keep track of collected "PickUp" objects.
     private int count;
     
@@ -74,11 +77,8 @@ public class PlayerController : MonoBehaviour
             gameRunning = false;
             gameManager.FailLevel();
         }
-
         UpdateTimeText();
     }
-
-
 
 
     // This function is called when a move input is detected.
@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
         // Apply force to the Rigidbody to move the player.
         rb.AddForce(movement * speed);
     }
+
 
 
     void OnTriggerEnter(Collider other)
@@ -128,8 +129,7 @@ public class PlayerController : MonoBehaviour
         // Check if the count has reached or exceeded the win condition.
         if (count >= 9)
         {
-            // Display the win text.
-            //winTextObject.SetActive(true);
+            gameRunning = false;
 
             gameManager.CompleteLevel();
 
@@ -140,17 +140,41 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+
+        if (collision.gameObject.CompareTag("Ground"))
+           isGrounded = true;
+
+
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            //Destroy the current object
-
-            //Destroy(gameObject);
+            gameRunning = false;
             gameObject.SetActive(false);
             gameManager.FailLevel();
                
 
         }
 
+    }
+
+
+    void OnJump()
+    {
+        if (!gameRunning) return;
+        if (!isGrounded) return;
+
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isGrounded = false;
+
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+
+        if (collision.gameObject.CompareTag("Ground"))
+        
+            isGrounded = false;
+        
     }
 
     void UpdateTimeText()

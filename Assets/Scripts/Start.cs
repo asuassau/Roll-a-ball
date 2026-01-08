@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 public class Start : MonoBehaviour
 {
 
-    public void LoadNextLevel()
+    public void LoadFirstLevel()
     {
-        Debug.Log("Loading Next Level!");
+        Debug.Log("Start");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
