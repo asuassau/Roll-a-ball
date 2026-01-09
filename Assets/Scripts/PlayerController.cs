@@ -4,147 +4,157 @@ using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
-    // Rigidbody of the player.
+    // se crea una variable para el rigidbody
     private Rigidbody rb;
 
+    // Fuerza de salto
     public float jumpForce = 5f;
+    //referencia para saber si está en el suelo
     private bool isGrounded = true;
 
-    // Variable to keep track of collected "PickUp" objects.
+    // contador de pickups
     private int count;
-    
 
-    // Movement along X and Y axes.
+
+    //movimiento en x y en y
     private float movementX;
     private float movementY;
 
-    // Speed at which the player moves.
+    // velocidad de movimiento
     public float speed = 0;
 
+    // tiempo del nivel
     public float levelTime;
+    // tiempo restante
     private float timeLeft;
+    // estado del juego
     private bool gameRunning = true;
 
 
 
 
-    // UI text component to display count of "PickUp" objects collected.
+    // variable para el texto del contador y del tiempo
     public TextMeshProUGUI countText;
     public TextMeshProUGUI timeText;
 
 
-    // UI object to display winning text.
-    //  public GameObject winTextObject;
+    // referencia al game manager
 
     public GameManager gameManager;
 
 
-    // Start is called before the first frame update.
+   
     void Start()
     {
+        //llama al start del game manager pero solo presenta Debug.Log
         gameManager.StartGame();
-        // Get and store the Rigidbody component attached to the player.
+        //asocia el rigidbody del player a la variable rb
         rb = GetComponent<Rigidbody>();
 
-        // Initialize count to zero.
+        // inicializa el contador de pickups a 0
         count = 0;
-        
 
-        // Update the count display.
+        // actualiza el texto del contador para cargar el valor inicial 0
         SetCountText();
 
+        // inicializa el tiempo restante
         timeLeft = levelTime;
 
+        // actualiza el texto del tiempo restante
         UpdateTimeText();
 
-
-
-
-        // Initially set the win text to be inactive.
-        //winTextObject.SetActive(false);
     }
 
 
+    // el metodo update se usa para el tiempo
     void Update()
     {
+
+        // si el juego no está corriendo, no hace nada
         if (!gameRunning) return;
 
+        // resta el tiempo transcurrido al tiempo restante
         timeLeft -= Time.deltaTime;
 
+        // si el tiempo se acaba, llama al metodo de fallo del game manager para mostrar que no se ha superado el nivel  y detiene el juego
         if (timeLeft <= 0f)
         {
             timeLeft = 0f;
             gameRunning = false;
             gameManager.FailLevel();
         }
+        // actualiza el texto del tiempo restante
         UpdateTimeText();
     }
 
 
-    // This function is called when a move input is detected.
+    // este metodo se llama cuando se recibe input de movimiento y recoge el valor del input
     void OnMove(InputValue movementValue)
     {
-        // Convert the input value into a Vector2 for movement.
+      
         Vector2 movementVector = movementValue.Get<Vector2>();
 
-        // Store the X and Y components of the movement.
+       
         movementX = movementVector.x;
         movementY = movementVector.y;
     }
 
-    // FixedUpdate is called once per fixed frame-rate frame.
+    //marca el movimiento fisico del player
     private void FixedUpdate()
     {
-        // Create a 3D movement vector using the X and Y inputs.
+        //hacer que el player se mueva segun el input recibido
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
-        // Apply force to the Rigidbody to move the player.
+        //aplica una fuerza al rigidbody del player en la direccion del movimiento multiplicada por la velocidad
         rb.AddForce(movement * speed);
     }
 
 
-
+    // este metodo se llama cuando el player colisiona con los pickups
     void OnTriggerEnter(Collider other)
     {
-        // Check if the object the player collided with has the "PickUp" tag.
+        // comprueba si el objeto con el que ha colisionado tiene la etiqueta "PickUp"
         if (other.gameObject.CompareTag("PickUp"))
         {
-            // Deactivate the collided object (making it disappear).
+            // desactiva el objeto "PickUp" para simular que ha sido recogido
             other.gameObject.SetActive(false);
 
-            // Increment the count of "PickUp" objects collected.
+            // incrementa el contador de pickups recogidos
             count = count + 1;
 
-            // Update the count display.
+            // actualiza el texto del contador para reflejar el nuevo valor
             SetCountText();
         }
     }
 
-    // Function to update the displayed count of "PickUp" objects collected.
+    // actualiza el texto del contador y comprueba la condicion de victoria
     void SetCountText()
     {
-        // Update the count text with the current count.
+        // Actualiza el texto del contador con el valor actual
         countText.text = "Count: " + count.ToString();
 
-        // Check if the count has reached or exceeded the win condition.
+        // Si se han recogido 9 pickups, el jugador gana
         if (count >= 9)
         {
             gameRunning = false;
 
             gameManager.CompleteLevel();
 
-            // Destroy the enemy GameObject.
+            // Elimina al enemigo del escenario
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
     }
 
+    // Este metodo se llama cuando el player colisiona con el suelo o con un enemigo
+
     private void OnCollisionEnter(Collision collision)
     {
+        // si colisiona con el suelo, marca que está en el suelo
 
         if (collision.gameObject.CompareTag("Ground"))
            isGrounded = true;
 
-
+        // si colisiona con un enemigo, detiene el juego y llama al metodo de fallo del game manager
         if (collision.gameObject.CompareTag("Enemy"))
         {
             gameRunning = false;
@@ -156,27 +166,33 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    // este metodo se llama cuando se recibe input de salto
     void OnJump()
     {
+
+        // si el juego no está corriendo o no está en el suelo, no hace nada
         if (!gameRunning) return;
         if (!isGrounded) return;
 
+        // aplica una fuerza hacia arriba al rigidbody del player para simular el salto
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // marca que no está en el suelo para evitar saltos dobles
         isGrounded = false;
 
 
     }
+    // este metodo se llama cuando el player deja de colisionar con el suelo
 
     private void OnCollisionExit(Collision collision)
     {
-
+        // si deja de colisionar con el suelo, marca que no está en el suelo
         if (collision.gameObject.CompareTag("Ground"))
         
             isGrounded = false;
         
     }
 
+    // actualiza el texto del tiempo restante
     void UpdateTimeText()
     {
         timeText.text = "Time Left: " + Mathf.CeilToInt(timeLeft).ToString();

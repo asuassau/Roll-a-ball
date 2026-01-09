@@ -3,26 +3,25 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    // Reference to the player's transform.
+    //Hace referencia al transform del jugador.
     public Transform player;
 
-    // Reference to the NavMeshAgent component for pathfinding.
+    // se crae una variable privada para almacenar el componente NavMeshAgent.
     private NavMeshAgent navMeshAgent;
 
-    // Start is called before the first frame update.
+ 
     void Start()
     {
-        // Get and store the NavMeshAgent component attached to this object.
+        // se almacena el componente NavMeshAgent del enemigo.
         navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame.
     void Update()
     {
-        // If there's a reference to the player...
+        // Verifica si la referencia al jugador no es nula.
         if (player != null)
         {
-            // Set the enemy's destination to the player's current position.
+            // Hace que el enemigo se mueva hacia la posición del jugador.
             navMeshAgent.SetDestination(player.position);
         }
     }
